@@ -12,6 +12,9 @@ def parse_url(url):
 
     return congress_number, full_billid
 
+def find_urls(comment):
+    return re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', comment)
+
 def format_comment_from_bill(bill):
     newline = "  \n"
 
@@ -31,22 +34,23 @@ def format_comment_from_bill(bill):
     comment = comment + "***Committee(s):*** " + bill.committees + newline
     comment = comment + "***Latest Major Action:*** " + bill.latest_major_action_date + ". " + bill.latest_major_action + newline
     
-    """
     comment = comment + "*****" + newline
 
     comment = comment + "######**Versions**" + newline
     if len(bill.versions) == 0:
-        comment = comment + "This bill has not undergone any revisions."
+        comment = comment + "No versions were found for this bill."
     else:
+        comment = comment + "Status|Title" + newline
+        comment = comment + ":--|:--" + newline
         for version in bill.versions:
-            pass
-    """
+            comment = comment + version.status + "|"
+            comment = comment + version.title + newline
 
     comment = comment + "*****" + newline
 
     comment = comment + "######**Actions**" + newline
     if len(bill.actions) == 0:
-        comment = comment + "This bill has not undergone any actions." + newline
+        comment = comment + "No actions were found for this bill." + newline
     else:
         for action in bill.actions:
             comment = comment + datetime.strftime(action.date, '***%Y-%m-%d:*** ') + action.desc + newline
@@ -55,10 +59,10 @@ def format_comment_from_bill(bill):
 
     comment = comment + "######**Votes**" + newline
     if len(bill.votes) == 0:
-        comment = comment + "This bill has not been voted on." + newline
+        comment = comment + "No votes were found for this bill." + newline
     else:
         comment = comment + "Chamber|Date|Roll Call|Question|Yes|No|Didn't Vote|Result" + newline
-        comment = comment + ":-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:" + newline
+        comment = comment + ":-:|:-:|:-:|:--|:-:|:-:|:-:|:-:" + newline
         for vote in bill.votes:
             comment = comment + vote.chamber + "|"
             comment = comment + datetime.strftime(vote.date, '%Y-%m-%d') + "|"

@@ -50,7 +50,12 @@ class Bill(object):
         self.latest_major_action = self.bill_data['latest_major_action']
         self.house_passage_vote = self.bill_data['house_passage_vote']
         self.senate_passage_vote = self.bill_data['senate_passage_vote']
-        self.versions = self.bill_data['versions']
+        
+        self.versions = []
+        i = 0
+        for version in self.bill_data['versions']:
+            self.versions.append(Map(status=version['status'], title=version['title'], url=version['thomas_url']))
+            i = i + 1
 
         self.actions = []
         i = 0
