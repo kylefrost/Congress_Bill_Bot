@@ -34,7 +34,7 @@ for comment in reddit.subreddit('KyleFrost').stream.comments():
 
     if "+/u/Congress_Bill_Bot [[" in comment.body:
         try:
-            congress, bill_id = re.search(r'\[\[(.*?)\]\]', comment.body).group(1).lower().replace(" ", "").split(",")
+            congress, bill_id = re.search(r'\[\[(.*?)\]\]', comment.body).group(1).lower().replace(" ", "").replace(".", "").split(",")
         
             reply = utils.format_comment_from_bill(pp.get_bill(congress, bill_id))
         
@@ -43,12 +43,3 @@ for comment in reddit.subreddit('KyleFrost').stream.comments():
             print "I replied to: " + comment.permalink()
         except:
             comment.reply("Sorry, I couldn't seem to find that bill.")
-
-        #print re.search(r'\[\[(.*?)\]\]').group(1).lower().replace(" ", "").split(",")
-        #congress, bill_id = re.search(r'\[\[(.*?)\]\]').group(1).lower().replace(" ", "").split(",")
-#
-#        reply = utils.format_comment_from_bill(pp.get_bill(congress, bill_id))
-#
-#        comment.reply(reply)
-#
-#        print "I replied to: " + comment.permalink()
