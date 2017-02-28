@@ -19,6 +19,11 @@ class ProPublica(object):
 
     def get_bill(self, congress, bill_id):
         url = self.base + congress + "/bills/" + bill_id + ".json"
+        json = self.get(url)
+
+        if json['status'] != "OK":
+            raise e.BillError('This bill was not found')
+
         return Bill(self.get(url))
 
 class Bill(object):

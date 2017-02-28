@@ -38,7 +38,7 @@ def format_comment_from_bill(bill):
 
     comment = comment + "######**Versions**" + newline
     if len(bill.versions) == 0:
-        comment = comment + "No versions were found for this bill."
+        comment = comment + "No versions were found for this bill." + newline
     else:
         comment = comment + "Status|Title" + newline
         comment = comment + ":--|:--" + newline
