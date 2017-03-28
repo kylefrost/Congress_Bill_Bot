@@ -21,17 +21,16 @@ def bot():
 
         congress, bill_id = utils.parse_url(submission.url)
 
-        try:
-            comment = utils.format_comment_from_bill(pp.get_bill(congress, bill_id))
+        comment = utils.format_comment_from_bill(pp.get_bill(congress, bill_id))
 
-            submission.reply(comment)
-            
-            print "I replied to: " + submission.shortlink
-        except:
-            pass
+        submission.reply(comment)
+        
+        print "I replied to: " + submission.shortlink
 
 while True:
     try:
         bot()
     except KeyboardInterrupt:
-        break
+        exit()
+    except:
+        pass
