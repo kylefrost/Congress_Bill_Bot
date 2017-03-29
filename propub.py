@@ -42,11 +42,15 @@ class Bill(object):
 
         self.congress = self.bill_data['congress']
         self.bill = self.bill_data['bill']
+        self.bill_type = self.bill_data['bill_type']
         self.bill_uri = self.bill_data['bill_uri']
         self.title = self.bill_data['title']
         self.sponsor = self.bill_data['sponsor']
+        self.sponsor_party = self.bill_data['sponsor_party']
+        self.sponsor_state = self.bill_data['sponsor_state']
         self.sponsor_uri = self.bill_data['sponsor_uri']
         self.pdf = self.bill_data['gpo_pdf_uri']
+        self.congressdotgov_url = self.bill_data['congressdotgov_url']
         self.introduced_date = self.bill_data['introduced_date']
         self.cosponsors = self.bill_data['cosponsors']
         self.primary_subject = self.bill_data['primary_subject']
@@ -59,7 +63,7 @@ class Bill(object):
         self.versions = []
         i = 0
         for version in self.bill_data['versions']:
-            self.versions.append(Map(status=version['status'], title=version['title'], url=version['thomas_url']))
+            self.versions.append(Map(status=version['status'], title=version['title']))
             i = i + 1
 
         self.actions = []
