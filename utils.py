@@ -6,8 +6,30 @@ from datetime import datetime
 def parse_url(url):
     url_parts = url.split('/')
     congress, chamber, billid = url_parts[4], url_parts[5], url_parts[6].split('?')[0]
+
+    bill_type = ""
+
+    if "senate-bill" in chamber:
+        bill_type = "s"
+    elif "house-bill" in chamber:
+        bill_type = "hr"
+    elif "senate-resolution" in chamber:
+        bill_type = "sres"
+    elif "house-resolution" in chamber:
+        bill_type = "hres"
+    elif "house-joint-resolution" in chamber:
+        bill_type = "hjres"
+    elif "senate-joint-resolution" in chamber:
+        bill_type = "sjres"
+    elif "house-concurrent-resolution" in chamber:
+        bill_type = "hconres"
+    elif "senate-concurrent-resolution" in chamber:
+        bill_type = "sconres"
+    else:
+        bill_type = "notfound"
+
     
-    full_billid = ('s' if chamber[:1] == 's' else 'hr') + billid
+    full_billid = bill_type + billid
     congress_number = re.findall('\d+', congress)[0]
 
     return congress_number, full_billid
@@ -18,14 +40,14 @@ def find_urls(comment):
 def format_comment_from_bill(bill):
     newline = "  \n"
 
-    comment = "**Here is some more information about " + bill.bill + "**" + (" - [PDF](" + bill.pdf + ")" + newline if len(bill.pdf) > 0 else "" + newline)
+    comment = u"#\U0001F3DB **Here is some more information about [" + bill.bill + "](" + bill.congressdotgov_url + ")**" + (" - [PDF](" + bill.pdf + ")" + newline if len(bill.pdf) > 0 else "" + newline)
 
     comment = comment + "*****" + newline
 
     comment = comment + "######**" + bill.title + "**" + newline
     comment = comment + "***Subject:*** " + bill.primary_subject + newline
     comment = comment + "***Congress:*** " + bill.congress + newline
-    comment = comment + "***Sponsor:*** " + bill.sponsor + newline
+    comment = comment + "***Sponsor:*** " + bill.sponsor + " (" + bill.sponsor_party + "-" + bill.sponsor_state + ")" + newline
     comment = comment + "***Introduced:*** " + bill.introduced_date + newline
     comment = comment + "***Cosponsors:*** " + bill.cosponsors + newline
 
@@ -74,6 +96,6 @@ def format_comment_from_bill(bill):
             comment = comment + vote.result + newline
 
     comment = comment + "*****" + newline
-    comment = comment + "[^^\[GitHub\]](https://github.com/kylefrost/Congress_Bill_Bot) ^^I ^^am ^^a ^^bot. [^^Feedback ^^is ^^welcome.](https://reddit.com/r/Congress_Bill_Bot)  ^^Created ^^by ^^/u/kylefrost"
+    comment = comment + "[^^\[GitHub\]](https://github.com/kylefrost/Congress_Bill_Bot) ^^I ^^am ^^a ^^bot. [^^Feedback ^^is ^^welcome.](https://np.reddit.com/r/Congress_Bill_Bot)  ^^Created ^^by ^^/u/kylefrost"
 
     return comment

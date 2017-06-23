@@ -12,7 +12,7 @@ reddit = praw.Reddit(client_id=const.CLIENT_ID,
 
 def bot():
     try:
-        for comment in reddit.subreddit('all').stream.comments():
+        for comment in reddit.subreddit().stream.comments():
             try:
                 urls = utils.find_urls(comment.body)
 

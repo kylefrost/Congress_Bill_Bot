@@ -4,6 +4,7 @@ import const
 import utils
 import praw
 import sys
+import analytics
 from propub import ProPublica
 
 reddit = praw.Reddit(client_id=const.CLIENT_ID,
@@ -21,17 +22,20 @@ def bot():
 
         congress, bill_id = utils.parse_url(submission.url)
 
-        try:
-            comment = utils.format_comment_from_bill(pp.get_bill(congress, bill_id))
+        bill = pp.get_bill(congress, bill_id)
 
-            submission.reply(comment)
-            
-            print "I replied to: " + submission.shortlink
-        except:
-            pass
+        comment = utils.format_comment_from_bill(bill)
+
+        submission.reply(comment)
+        
+        print "I replied to: " + submission.shortlink
+
+        analytics.db_insert(bill, submission.author.name, submission.subreddit, "S")
 
 while True:
     try:
         bot()
     except KeyboardInterrupt:
-        break
+        exit()
+    except:
+        pass
