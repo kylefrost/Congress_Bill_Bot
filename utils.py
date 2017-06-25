@@ -4,6 +4,10 @@ import re
 from datetime import datetime
 
 def parse_url(url):
+    """Returns type of legislation and  its ID.
+    arguments:
+    url - URL of legislation from Congress.gov	
+    """
     url_parts = url.split('/')
     congress, chamber, billid = url_parts[4], url_parts[5], url_parts[6].split('?')[0]
 
@@ -35,9 +39,18 @@ def parse_url(url):
     return congress_number, full_billid
 
 def find_urls(comment):
+    """Returns URL found in Reddit comment.
+    arguments:
+    comment - Reddit comment to be searched for potential URLs
+    """
+
     return re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', comment)
 
 def format_comment_from_bill(bill):
+    """Retuns string describing the legislation, formatted as a Reddit comment.
+    arguments:
+    bill - JSON object describing legislation obtained from Congress
+    """
     newline = "  \n"
 
     comment = u"#\U0001F3DB **Here is some more information about [" + bill.bill + "](" + bill.congressdotgov_url + ")**" + (" - [PDF](" + bill.pdf + ")" + newline if len(bill.pdf) > 0 else "" + newline)

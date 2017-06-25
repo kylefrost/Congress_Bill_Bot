@@ -17,12 +17,12 @@ reddit = praw.Reddit(client_id=const.CLIENT_ID,
 pp = ProPublica(const.PROPUB_KEY)
 
 def bot():
+   
     for comment in reddit.subreddit(sys.argv[1]).stream.comments():
         if comment.author.name == "Congress_Bill_Bot":
             continue
 
         urls = utils.find_urls(comment.body)
-
         if len(urls) > 0:
             bills = []
 
@@ -58,6 +58,7 @@ def bot():
 
 
         elif "+/u/Congress_Bill_Bot [[" in comment.body:
+ 
             print "************SUMMONED*************"
             print "Comment: " + comment.permalink(fast=True)
 

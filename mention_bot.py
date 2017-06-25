@@ -15,6 +15,8 @@ reddit = praw.Reddit(client_id=const.CLIENT_ID,
 pp = ProPublica(const.PROPUB_KEY)
 
 def bot():
+    """Searches Reddit for mentions of the bot.
+    If found replies with information about legislation user requested."""
     for mention in reddit.inbox.stream():
         if "+/u/congress_bill_bot" in mention.body.lower():
             print "************SUMMONED*************"
@@ -31,6 +33,7 @@ def bot():
                 comment.reply("Sorry, I couldn't seem to find that bill.")
 
 while True:
+    """Main program loop. Runs until interrupted by user or until exception occurs."""
     try:
         bot()
     except KeyboardInterrupt:

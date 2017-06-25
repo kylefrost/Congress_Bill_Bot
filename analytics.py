@@ -3,6 +3,9 @@ import const
 import datetime
 
 def db_insert(bill, author, sub, post_t):
+    """Stores information about bots activity in MySQL database. 
+    Including, username of Reddit user who called the bot, subreddit where the user posted his reequest, date of request and general information about requested legislation.
+    """
     chamber = bill.bill[:1]
     billid = int(filter(str.isdigit, str(bill.bill)))
     billtype = ""
@@ -25,6 +28,7 @@ def db_insert(bill, author, sub, post_t):
     cursor = db.cursor()
 
     try:
+        """Inserts data into table bills. If INSERT fails, rolls back database and prints exception message."""
         cursor.execute("INSERT INTO bills (chamber, billid, billtype, congress, link_author, subreddit, date_linked, post_type) VALUES('%s', %d, '%s', %d, '%s', '%s', '%s', '%s')" % (chamber, billid, billtype, congress, link_author, subreddit, date_linked, post_type))
         db.commit()
     except Exception as e:
